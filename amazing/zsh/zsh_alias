@@ -1,0 +1,20 @@
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias grep='grep --color=auto -E'
+alias df='df -h'
+alias attach='tmux attach-session -t '
+alias detach='tmux kill-session -t '
+alias cat=ccat
+alias vi="vim --noplugin"
+#alias j=z
+alias envopenstack='source /Users/gaoyan/gaoyan/.venv/openstack/bin/activate'
+alias developer='source /Users/gaoyan/gaoyan/.venv/developer/bin/activate'
+alias tmuxnew="tmux new-session -s MacOS -n 'MacOS'"
+alias cd=" cd"
+alias j=" z"
+alias f=" f"
+alias z=" z"
+alias ls=" ls"
+alias yd=" ydict"
+#alias vim="nvim"

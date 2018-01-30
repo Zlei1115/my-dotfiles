@@ -1,0 +1,586 @@
+" ***************** 全局设置 ************** "
+"set mouse=a
+"set selection=exclusive
+"set selectmode=mouse,key
+"set completeopt=longest,menu
+"set scrolloff=5
+"set history=1000
+
+" 开启文件类型侦测
+filetype on
+" 根据侦测到的不同类型加载对应的插件
+filetype plugin on
+
+" 自动缩进
+filetype indent on
+
+" 开启语法高亮功能
+syntax enable
+" 允许用指定语法高亮配色方案替换默认方案
+syntax on
+set cmdheight=1
+set nocompatible "关闭兼容模式
+set incsearch "开启实时搜索功能
+set ignorecase "搜索忽略大小写
+set wildmenu "vim命令自动补全
+set autoread "文件自动更新
+set gcr=a:block-blinkon0 "禁止关闭闪烁
+set laststatus=2 "总是显示状态栏
+set ruler "显示光标位置
+set number "显示行号
+"set cursorline "高亮显示当前行
+"set cursorcolumn "高亮显示当前列
+set hlsearch "高亮显示搜索结果
+" set nowrap "禁止折行
+set backspace=2 "回退键生效
+"set backspace=indent,eol,start
+
+" 禁止显示滚动条
+set guioptions-=l
+set guioptions-=L
+set guioptions-=r
+set guioptions-=R
+
+" 禁止显示菜单和工具条
+set guioptions-=m
+set guioptions-=T
+
+" 将制表符扩展为空格
+set expandtab
+" 设置编辑时制表符占用空格数
+set tabstop=4
+" 设置格式化时制表符占用空格数
+set shiftwidth=4
+" 让 vim 把连续数量的空格视为一个制表符
+set softtabstop=4
+" 基于缩进或语法进行代码折叠
+set foldmethod=syntax
+" 启动 vim 时关闭折叠代码
+set nofoldenable
+
+" 打开上次文件关闭的位置
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+
+" *************** 设置全局快捷键 *****************
+
+" 定义快捷键的前缀，即<Leader>
+"let mapleader="\<space>"
+let mapleader="'"
+
+" 设置快捷键将选中文本块复制至系统剪贴板
+vnoremap <Leader>y "+y
+
+" 设置快捷键将系统剪贴板内容粘贴至 vim
+nmap <Leader>p "+p
+
+" 定义快捷键关闭当前分割窗口
+nmap <silent> <Leader>q :q!<CR>
+
+" 定义快捷键保存当前窗口内容
+nmap <silent> <Leader>w :w!<CR>
+" 使用sudo强制保存文件
+nmap <silent> <Leader>W :w !sudo tee %<CR>
+
+" 定义快捷键保存所有窗口内容并退出 vim
+"nmap <Leader>WQ :wa<CR>:q<CR>
+
+" 不做任何保存，直接退出 vim
+"nmap <Leader>Q :qa!<CR>
+
+" 跳转至右方的窗口
+nnoremap <silent> <Leader>l <C-W>l
+
+" 跳转至左方的窗口
+nnoremap <silent> <Leader>h <C-W>h
+
+" 跳转至上方的子窗口
+nnoremap <silent> <Leader>k <C-W>k
+
+" 跳转至下方的子窗口
+nnoremap <silent> <Leader>j <C-W>j
+
+" 清除高亮显示
+nmap <silent> <Leader>N :noh<CR>
+
+" 定义快捷键在结对符之间跳转
+nmap <silent> <Leader>M %
+
+nnoremap <silent> <Leader>g <C-]>
+nnoremap <silent> <Leader>b <C-t>
+
+" ************** 插件管理与设置 ************ "
+
+" vundle 环境设置
+filetype off
+"set rtp+=~/.config/nvim/bundle/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim
+" vundle 管理的插件列表必须位于 vundle#begin() 和 vundle#end() 之间
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'octol/vim-cpp-enhanced-highlight' "对c++语法高亮增强
+Plugin 'majutsushi/tagbar' "taglist的增强版，查看标签，依赖于ctags
+Plugin 'scrooloose/nerdcommenter' "多行注释，leader键+cc生成, leader+cu删除注释
+Plugin 'scrooloose/nerdtree' "文件浏览
+Plugin 'kien/ctrlp.vim' "搜索历史打开文件，在命令行模式下按ctrl+p触发
+Plugin 'vim-scripts/grep.vim' "在命令行模式使用grep命令，:Grep
+"Plugin 'Lokaltog/vim-easymotion' "快速跳转，按两下leader键和f组合
+"Plugin 'vim-scripts/ShowTrailingWhitespace.git' "高亮显示行尾的多余空白字符
+Plugin 'vim-scripts/indentpython.vim.git'
+Plugin 'vim-scripts/Solarized.git' "主题方案
+Plugin 'nathanaelkane/vim-indent-guides.git' "缩进对齐显示
+"Plugin 'vim-scripts/indexer.tar.gz' "自动生成标签
+"Plugin 'vim-scripts/DfrankUtil' "indexer 依赖
+"Plugin 'vim-scripts/vimprj' "indexer 依赖
+"Plugin 'Valloric/YouCompleteMe' "自动补全
+"Plugin 'davidhalter/jedi-vim' "python 补全，不依赖于tags,但比较慢，可以使用indexer替换，但不能跳转项目外
+Plugin 'vim-scripts/Markdown'
+Plugin 'tpope/vim-surround'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'ConradIrwin/vim-bracketed-paste' " 使用bracketed-paste mode，粘贴代码时避免格式化
+" -------------------------------------
+Plugin 'pearofducks/ansible-vim'
+Plugin 'rizzatti/dash.vim'
+Plugin 'Glench/Vim-Jinja2-Syntax'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'vim-airline/vim-airline'
+Plugin 'moll/vim-bbye'
+"Plugin 'bling/vim-bufferline'
+Plugin 'tpope/vim-fugitive'
+Plugin 'fatih/vim-go'
+Plugin 'rking/ag.vim'
+Plugin 'w0rp/ale'
+Plugin 'jmcantrell/vim-virtualenv'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'thinca/vim-quickrun'
+Plugin 'ervandew/supertab'
+Plugin 'Raimondi/delimitMate'
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'mindriot101/vim-yapf'
+Plugin 'rhysd/vim-clang-format'
+Plugin 'fholgado/minibufexpl.vim'
+" 插件列表结束
+call vundle#end()
+filetype on
+
+" 设置tagbar
+" 设置 tagbar 子窗口的位置出现在主编辑区的左边
+let tagbar_left=0
+" " 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
+"nnoremap <Leader>t :TagbarToggle<CR>
+:map <silent> <F2> :TagbarToggle<CR>
+
+" " 设置标签子窗口的宽度
+"let tagbar_width=32
+let tagbar_width=25
+" " tagbar 子窗口中不显示冗余帮助信息
+let g:tagbar_compact=1
+" " 设置 ctags 对哪些代码标识符生成标签
+
+" signature设置
+let g:SignatureMap = {
+        \ 'Leader'             :  "m",
+        \ 'PlaceNextMark'      :  "m,",
+        \ 'ToggleMarkAtLine'   :  "m.",
+        \ 'PurgeMarksAtLine'   :  "m-",
+        \ 'DeleteMark'         :  "dm",
+        \ 'PurgeMarks'         :  "mda",
+        \ 'PurgeMarkers'       :  "m<BS>",
+        \ 'GotoNextLineAlpha'  :  "']",
+        \ 'GotoPrevLineAlpha'  :  "'[",
+        \ 'GotoNextSpotAlpha'  :  "`]",
+        \ 'GotoPrevSpotAlpha'  :  "`[",
+        \ 'GotoNextLineByPos'  :  "]'",
+        \ 'GotoPrevLineByPos'  :  "['",
+        \ 'GotoNextSpotByPos'  :  "mn",
+        \ 'GotoPrevSpotByPos'  :  "mp",
+        \ 'GotoNextMarker'     :  "[+",
+        \ 'GotoPrevMarker'     :  "[-",
+        \ 'GotoNextMarkerAny'  :  "]=",
+        \ 'GotoPrevMarkerAny'  :  "[=",
+        \ 'ListLocalMarks'     :  "ms",
+        \ 'ListLocalMarkers'   :  "m?"
+        \ }
+
+" 使用 NERDTree 插件查看工程文件。设置快捷键，速记：file list
+"nmap <Leader>f :NERDTreeToggle<CR>
+:map <silent> <F1> :NERDTreeToggle<CR>
+" 设置NERDTree子窗口宽度
+let NERDTreeWinSize=32
+" 设置NERDTree子窗口位置
+let NERDTreeWinPos="left"
+" 显示隐藏文件
+let NERDTreeShowHidden=1
+" NERDTree 子窗口中不显示冗余帮助信息
+let NERDTreeMinimalUI=1
+" 删除文件时自动删除文件对应 buffer
+let NERDTreeAutoDeleteBuffer=1
+
+" YCM 补全菜单配色
+" 菜单
+"highlight Pmenu ctermfg=2 ctermbg=3 guifg=#005f87 guibg=#EEE8D5
+" 选中项
+"highlight PmenuSel ctermfg=2 ctermbg=3 guifg=#AFD700 guibg=#106900
+" 补全功能在注释中同样有效
+let g:ycm_complete_in_comments=1
+" 允许 vim 加载 .ycm_extra_conf.py 文件，不再提示
+let g:ycm_confirm_extra_conf=0
+" 开启 YCM 标签补全引擎
+let g:ycm_collect_identifiers_from_tags_files=1
+" 引入 C++ 标准库tags
+set tags+=/data/misc/software/misc./vim/stdcpp.tags
+" YCM 集成 OmniCppComplete 补全引擎，设置其快捷键
+"inoremap <leader>; <C-x><C-o>
+" 补全内容不以分割子窗口形式出现，只显示补全列表
+set completeopt-=preview
+" 从第一个键入字符就开始罗列匹配项
+let g:ycm_min_num_of_chars_for_completion=1
+" 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_cache_omnifunc=0
+" 语法关键字补全
+let g:ycm_seed_identifiers_with_syntax=1
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+
+""" color settings
+set t_Co=256
+if has("gui_running")
+    set guioptions=gR
+    set mousemodel=popup
+    set background=light
+    ""hi LineNr cterm=bold guibg=black guifg=white
+    ""hi CursorLine cterm=none ctermbg=lightgray ctermfg=none
+    ""hi CursorColumn cterm=none ctermbg=lightgray ctermfg=none
+else
+    set background=dark
+    ""hi LineNr cterm=bold ctermbg=black ctermfg=white
+    ""hi CursorLine cterm=none ctermbg=darkgray ctermfg=none
+    ""hi CursorColumn cterm=none ctermbg=darkgray ctermfg=none
+endif
+
+":silent! colorscheme solarized
+:silent! colorscheme molokai
+"colorscheme default
+
+" indent guides
+"let g:indent_guides_enable_on_vim_startup=1
+" 从第二层开始可视化显示缩进
+let g:indent_guides_start_level=2
+"let g:indent_guides_auto_colors = 0
+"hi IndentGuidesOdd  guibg=red   ctermbg=3
+"hi IndentGuidesEven guibg=green ctermbg=4
+" 色块宽度
+let g:indent_guides_guide_size=1
+" 快捷键 i 开/关缩进可视化
+noremap <silent> <Leader>sj :IndentGuidesToggle<CR>
+
+" 每行不能超过80字符，否则高亮显示
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"match OverLength /\%80v.\+/
+
+nmap <silent> <Leader>s :Dash<CR>
+
+
+let python_highlight_all = 1
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
+
+
+" ansible
+let g:ansible_unindent_after_newline = 1
+let g:ansible_extra_syntaxes = "sh.vim ruby.vim"
+let g:ansible_attribute_highlight = "ob"
+
+
+"openstack
+"set list
+"set listchars=tab:>-,trail:-,extends:#,nbsp:-
+set modeline
+"set tw=78
+set tabstop=8 expandtab shiftwidth=4 softtabstop=4
+
+" 访问剪贴板
+"set clipboard=unnamed
+
+nnoremap <silent> <C-N> :bn<CR>
+nnoremap <silent> <C-M> :bp<CR>
+"nnoremap <silent> <C-X> :bd!<CR>
+set hidden
+
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+map <silent> <F8> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+set tags=tags;
+set autochdir
+
+let g:airline#extensions#tabline#buffer_nr_show = 1
+" 关闭状态显示空白符号计数,这个对我用处不大"
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#whitespace#symbol = '!'
+" 在Gvim中我设置了英文用Hermit， 中文使用 YaHei Mono "
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+:nnoremap <silent> <Leader>x :Bdelete!<CR>
+:nnoremap <silent> <C-x> :Bdelete!<CR>
+":nnoremap  <C-m> :tn<CR>
+:nnoremap  <C-a> :tp<CR>
+let python_highlight_all = 1
+
+"highlight Comment ctermfg=black guifg=black
+"
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cscope setting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("cscope")
+  set csprg=/usr/local/bin/cscope
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  endif
+  set csverb
+endif
+
+nmap <C-\>j  :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>k  :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>u  :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>i  :cs find c <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+"nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+
+set rtp+=/usr/local/opt/fzf
+
+set cin
+
+nnoremap <silent>  <leader>a :call Yapf()<cr>
+"let g:yapf_style = "pep8"
+let g:yapf_style = "google"
+
+let g:clang_format#style_options = {
+            \ "Style": "WebKit",
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11"}
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap<silent>  <Leader>f :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap<silent>  <Leader>f :ClangFormat<CR>
+" if you install vim-operator-user
+"autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" Toggle auto formatting:
+"nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+let g:ag_prg='ag -S --vimgrep --nocolor --nogroup --column --ignore sitedata --ignore image --ignore "tags" --ignore "cscope*"'
+"let g:ag_working_path_mode="r"
+
+"nmap <c-l> :Ag! ""<left>. Ag!
+nmap <c-l> :Ag! ""<left>
+
+let NERDChristmasTree = 1               " Tells the NERD tree to make itself colourful and pretty.
+let NERDTreeAutoCenter =1               " Window centers when the cursor moves within a specified distance to the top/bottom of the window.
+let NERDTreeAutoCenterThreshold = 3     " Controls the sensitivity of autocentering.
+let NERDTreeCaseSensitiveSort = 0       " Tells the NERD tree whether to be case sensitive or not when sorting nodes.
+let NERDTreeChDirMode = 2               " Tells the NERD tree if/when it should change vim's current working directory.
+let NERDTreeHighlightCursorline = 1     " Tell the NERD tree whether to highlight the current cursor line.
+let NERDTreeHijackNetrw = 1             " Tell the NERD tree whether to replace the netrw autocommands for exploring local directories.
+let NERDTreeIgnore= ['\~$','.*\.pyc','.*\.pyo', '^tags$', 'cscope',
+                    \ '.*\.egg-info$', '.*\.egg$', '__pycache__']
+let NERDTreeBookmarksFile =$HOME.'/.NERDTreeBookmarks' " Where the bookmarks are stored.
+let NERDTreeMouseMode = 3               " Tells the NERD tree how to handle mouse clicks.
+let NERDTreeQuitOnOpen = 0              " Closes the tree window after opening a file.
+let NERDTreeShowBookmarks = 0           " Tells the NERD tree whether to display the bookmarks table on startup
+let NERDTreeShowFiles = 1               " Tells the NERD tree whether to display files in the tree on startup.
+let NERDTreeShowHidden = 0              " Tells the NERD tree whether to display hidden files on startup.
+let NERDTreeShowLineNumbers = 0         " Tells the NERD tree whether to display line numbers in the tree window.
+let NERDTreeSortOrder = ['\/$', '*', '\.swp$', '\.bak$', '\~$'] " Tell the NERD tree how to sort the nodes in the tree.
+let NERDTreeStatusline = "%{exists('b:NERDTreeRoot')?b:NERDTreeRoot.path.str():''}" " Set a statusline for NERD tree windows.
+let NERDTreeWinPos = "left"             " Tells the script where to put the NERD tree window
+let NERDTreeWinSize = 21                " Sets the window size when the NERD tree is opened.
+let NERDTreeMinimalUI=1
+let NERDTreeDirArrows=1
+
+
+let g:ctrlp_custom_ignore = {
+    \ 'dir': '\.git$\|\.svn$|\.tox$',
+    \ 'file': '\.pyc$\|\.pyo$'
+    \}
+
+
+
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:SuperTabDefaultCompletionType = '<C-n>'
+let g:ycm_python_binary_path = '/usr/local/bin/python2'
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_auto_trigger = 1
+
+let g:ycm_key_list_stop_completion = ['<CR>']
+
+
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_enter = 0
+let g:ale_sign_column_always = 0
+"let g:ale_sign_error = '>>'
+"let g:ale_sign_warning = '--'
+let g:airline#extensions#ale#enabled = 1
+
+
+
+let g:ale_completion_enabled = 1
+"let g:ale_echo_msg_error_str = 'E'
+"let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+
+
+"let g:ale_linters = {'c': 'clang-format'}
+"let g:ale_linters = {'c++': 'clang++'}
+
+"let b:ale_linters = ['pep8', 'pylint']
+" Fix Python files with autopep8 and yapf.
+"let b:ale_fixers = ['yapf', 'autopep8']
+" Disable warnings about trailing whitespace for Python files.
+let b:ale_warn_about_trailing_whitespace = 0
+
+map <silent> <leader><space> :FixWhitespace<cr>
+
+
+
+"quickrun {{{
+    let g:quickrun_config = {
+    \   "_" : {
+    \       "outputter" : "message",
+    \   },
+    \}
+
+    let g:quickrun_no_default_key_mappings = 1
+    nmap <silent> <Leader>r <Plug>(quickrun)
+    map <silent> <F10> :QuickRun<CR>
+"}}}
+"
+"
+"map <silent> <F4> :ALEToggle<CR>
+"map <F4> :ALEToggle<CR>
+noremap <silent> <F4> :ALEToggle<CR>
+
+"nmap <silent> <F4> :ALEToggle<CR>
+
+autocmd FileType python nnoremap <Leader>i :!isort %<CR><CR>
+
+
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<tab>"
+"let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+
+let g:ycm_complete_in_comments=1
+let g:ycm_complete_in_strings = 1
+let g:ycm_collect_identifiers_from_comments_and_strings=0
+let g:ycm_confirm_extra_conf=0
+let g:ycm_collect_identifiers_from_tags_files=1
+let g:ycm_min_num_of_chars_for_completion=2
+let g:ycm_seed_identifiers_with_syntax=1
+let g:ycm_autoclose_preview_window_after_completion=1
+"set completeopt=longest,menu,preview
+set completeopt=longest,menu
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+"autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+"" change key map (VimTip1228)
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+
+"auto between in center
+nnoremap j jzz
+nnoremap k kzz
+" esc cansel the high light
+"nnoremap <esc> :nohl<cr>
+
+nnoremap <silent> <F6> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
+nnoremap <silent> <F7> :set hlsearch!<CR>
+set noswapfile
+
+
+let g:formatter_yapf_style = 'pep8'
+"let g:formatter_yapf_style = 'google'
+
+noremap <silent> <F3> :Autoformat<CR>
+
+"保存自动格式化
+"au BufWrite * :Autoformat
+
+"C语言配置
+let g:formatdef_allman = '"astyle --style=allman --pad-oper"'
+let g:formatters_cpp = ['allman']
+let g:formatters_c = ['allman']
+
+
+"map <Left> <Nop>
+"map <Right> <Nop>
+"map <Up> <Nop>
+"map <Down> <Nop>
+
+
+au InsertLeave * set nopaste
+
+autocmd BufNewFile *.sh,*.py exec ":call AutoSetFileHead()"
+function! AutoSetFileHead()
+    "如果文件类型为.sh文件
+    if &filetype == 'sh'
+        call setline(1, "\#!/bin/bash")
+    endif
+
+    "如果文件类型为python
+    if &filetype == 'python'
+        call setline(1, "\#!/usr/bin/env python2")
+        call append(1, "\# encoding: utf-8")
+    endif
+
+    normal G
+    normal o
+    normal o
+endfunc
+
+
+noremap <silent> <F5> :call QuickfixToggle()<CR>
+
+let g:quickfix_is_open = 0
+
+function! QuickfixToggle()
+    if g:quickfix_is_open
+        cclose
+        let g:quickfix_is_open = 0
+    else
+        copen
+        let g:quickfix_is_open = 1
+    endif
+endfunction
+
+
+map <F9> :MBEToggle<CR>

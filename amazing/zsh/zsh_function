@@ -1,0 +1,150 @@
+function z_replacement()
+{
+    [ $# -gt 0 ] && _z "$*" && return
+    cd "$(_z -l 2>&1 | fzf-tmux --height 40% --border +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
+}
+
+if which fzf &>/dev/null
+then
+    alias z='z_replacement'
+fi
+
+function f() {
+    # eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf-tmux --height 40% --border +s --tac | sed 's/ *[0-9]* *//')
+}
+
+function ss() {
+    # eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 | grep " ssh " || history) | fzf-tmux --height 40% --border +s --tac | sed 's/ *[0-9]* *//')
+}
+
+function v() {
+  local files
+  files=($(fzf-tmux --height 40% --border --query="$1" --multi --select-1 --exit-0))
+  print -z 'vim'' '$files
+ # [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+function cvpn(){
+    ps -ef | grep openvpn | awk '{print $2}' | sudo xargs kill -9  2>> /dev/null
+    ps -ef | grep openvpn | awk '{print $2}' | sudo xargs kill -9  2>> /dev/null
+}
+
+function bj(){
+    cvpn
+    local CONFDIR='/Users/gaoyan/Desktop/workers/openvpn/'
+    sudo /usr/local/sbin/openvpn --config $CONFDIR/99cloud-BJ.conf --ca $CONFDIR/ca.crt --cert $CONFDIR/gao.yan.crt --key $CONFDIR/gao.yan.key --auth-user-pass $CONFDIR/auth.cfg --daemon
+}
+
+function shh(){
+    cvpn
+    local CONFDIR='/Users/gaoyan/Desktop/workers/openvpn/'
+    sudo /usr/local/sbin/openvpn --config $CONFDIR/99cloud-SH.conf --ca $CONFDIR/ca.crt --cert $CONFDIR/gao.yan.crt --key $CONFDIR/gao.yan.key --auth-user-pass $CONFDIR/auth.cfg --daemon
+}
+
+# 99cloud------------------------------
+function proxy_kill()
+{
+    ps -ef | grep privoxy | awk '{print $2}' | sudo xargs kill -9  2>> /dev/null
+}
+
+function proxy_off(){
+    proxy_kill
+    unset http_proxy
+    unset https_proxy
+    echo -e "iterm shadowsocks proxy off"
+}
+function proxy_on() {
+    proxy_kill
+    sudo /usr/local/sbin/privoxy /usr/local/etc/privoxy/config
+    export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+    export http_proxy="http://127.0.0.1:8118";
+    export https_proxy=$http_proxy
+    echo -e "iterm shadowsocks proxy on"
+}
+
+function ss_off()
+{
+    #sudo sslocal -c /Users/gaoyan/gaoyan/shadowsocks/wechat.json -d stop 2>> /dev/null
+    sudo sslocal -c /Users/gaoyan/gaoyan/shadowsocks/gaoyan.json -d stop 2>> /dev/null
+    ps -ef | grep sslocal | awk '{print $2}' | sudo xargs kill -9  2>> /dev/null
+    echo -e 'shadowsocks off'
+}
+
+function ss_on()
+{
+    ss_off
+    #sudo sslocal -c /Users/gaoyan/gaoyan/shadowsocks/wechat.json -d start 2>> /dev/null
+    sudo sslocal -c /Users/gaoyan/gaoyan/shadowsocks/gaoyan.json -d start 2>> /dev/null
+    echo -e 'shadowsocks on'
+}
+
+function vpn_off()
+{
+    ss_off
+    proxy_off
+}
+
+#-shadowsocks config---------------------
+
+function vps()
+{
+    local password=""
+    sshpass -p  "${password}"  ssh -p 27216 root@67.216.197.241
+}
+
+function cleanhistory()
+{
+    sort -t ";" -k 2 -u ~/.zsh_history 2>/dev/null | sort -o ~/.zsh_history 2>/dev/null
+}
+
+cleanhistory
+
+function unsetos()
+{
+    unset  OS_PROJECT_DOMAIN_NAME
+    unset  OS_USER_DOMAIN_NAME
+    unset  OS_PROJECT_NAME
+    unset  OS_TENANT_NAME
+    unset  OS_USERNAME
+    unset  OS_PASSWORD
+    unset  OS_AUTH_URL
+    unset  OS_INTERFACE
+    unset  OS_IDENTITY_API_VERSION
+}
+
+function os-180()
+{
+    unsetos
+    envopenstack
+    source ~/.openstack/os-180
+}
+
+function os-100()
+{
+    unsetos
+    envopenstack
+    source ~/.openstack/os-100
+}
+
+function portal()
+{
+    ping 172.18.24.141 -t 2 -c 1 &>/dev/null
+    if [[ $? == 0 ]]
+    then
+        sshpass -p "" ssh root@172.18.24.141
+    else
+        ssh -p 10230 root@67.216.197.241
+    fi
+}
+
+function sshr() 
+{
+    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ]; then
+            tmux rename-window "$*"
+            command ssh root@"$@"
+    else
+            command ssh root@"$@"
+    fi
+}
